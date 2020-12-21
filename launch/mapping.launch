@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+  <params name="/use_sim_time" value="true"/>
+
+<!-- launch-prefix="xterm -e gdb - -args" -->
+  <node pkg="long_term_relocalization" name="relocalization_main" type="relocalization_main" output="screen" >
+  </node>
+
+  <node name="rviz" pkg="rviz" type="rviz" required="true" args="-d $(find long_term_relocalization)/rviz/mapping.rviz"/>
+
+</launch>

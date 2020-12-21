@@ -1,0 +1,184 @@
+nclt_reader:
+  keyframe_delta_translation: 1.5    #Unit: meter.
+  keyframe_delta_rotation_angle: 60.0 #  Unit: degree.
+  global_point_cloud_map_downsample_leaf_size: 0 # only downsaple when this param>0
+  global_point_cloud_map_publish_frequency: 0.2 # hz
+
+  skip_frames: 0
+  publish_online: true # if false, will write to rosbag by the following name
+  publish_frequency: 20 # unit: hz, default: 5
+  bag_filename: /media/silinli/document/nclt_dataset/2012-01-08/nclt.bag
+
+ground_plane_fitter:
+  ### Ground Plane Fitting Segmenter
+  ## in Paper: Nsegs=3/Niter=3/Nlpr=20/THseeds=0.4m/THdist=0.2m
+  # gpf_sensor_model: 64,
+  gpf_sensor_height: 0.5
+  # fitting multiple planes, at most 6 segments
+  ## default: 1
+  gpf_num_segment: 1
+  #gpf_num_segment: 3,
+  # number of iterations
+  #gpf_num_iter: 3,
+  gpf_num_iter: 10
+  ## number of points used to estimate the lowest point representative(LPR)
+  # double of senser model???
+  # gpf_num_lpr: 128,
+  gpf_num_lpr: 1280
+  gpf_th_lprs: 0.08
+  # threshold for points to be considered initial seeds
+  gpf_th_seeds: 0.1
+  #gpf_th_seeds: 0.5,
+  # ground points threshold distance from the plane <== large to guarantee safe removal
+  gpf_th_gnds: 0.23
+
+preprocessor:
+  sor_noise_meank: 10
+  sor_noise_stddev_multhresh: 1.0
+
+ground_octo_map:
+  octomap_resolution: 0.2
+  ground_semantic_label: 0
+
+depth_clustering:
+  width: 1800
+  height: 80
+  max_ground_seed_angle: 1.0 # degree
+  max_ground_diff_angle: 5.0 # degree
+  max_ground_diff_z: 0.2
+  max_cluster_distance: 0.3
+  min_cluster_angle: 10.0 #degree
+  min_cluster_size: 30
+  min_good_cluster_diff_z: 0.5
+  ground_semantic_label: 40
+  sidewalk_semantic_label: 48
+
+difference_of_normals_segmenter_params:
+  min_cluster_size: 20
+  max_cluster_size: 100000
+  cluster_tolerance: 0.3
+  don_small_radius: 0.5
+  don_large_radius: 5.0
+  num_normal_estimation_threads: 8
+  min_don_magnitude: 0.5
+  diff_angle_with_z_axis_stitch_clusters: 20 #degree
+  max_distance_stitch_clusters: 0.5
+
+semantic_eucidean_clustering:
+  euclidean_radius: 0.2
+  min_cluster_size: 10
+  pole:
+    name: pole
+    label: 80
+    euclidean_radius: 0.5
+    min_cluster_size: 10
+  trunck:
+    name: trunck
+    label: 71
+    euclidean_radius: 0.5
+    min_cluster_size: 10
+  building:
+    name: building
+    label: 1000 #50
+    euclidean_radius: 1.0
+    min_cluster_size: 10
+  other_object:
+    name: other_object
+    label:  10000 #99
+    euclidean_radius: 0.5
+    min_cluster_size: 10
+
+  min_pole_height: 1.0
+  max_pole_xy_bound: 0.6
+  
+  # clusters merge conditions
+  max_angle_with_vertical_two_clusters: 20 # degree 
+  max_distance_two_clusters: 1.0
+
+local_map:
+  descriptor_types: [EigenvalueBased] # "EnsembleShapeFunctions"
+  semantic_labels: [80, 71]
+  max_point_height: 10.0
+  min_cluster_size: 20
+  min_pole_height: 0.5
+  max_pole_xy_bound: 0.6
+  max_register_cluster_distance: 0.5
+
+  search_radius: 50  # 50
+  local_cluster_size: 40 #40
+
+  max_diff_num_neighbors: 5
+  num_closest_edges: 5
+  max_diff_dist: 0.3
+  max_diff_angle: 10.0 #degree
+  max_diff_dist_angle: 0.2
+  min_num_edges_matches: 5
+  max_dist_of_neighbor_cluster_match: 0.25
+
+cluster_knn_finder:
+  n_nearest_neighbours: 120
+  knn_feature_dim: 7
+  enable_two_stage_retrieval: false
+  feature_distance_threshold: 0.01
+  normalize_eigen_for_knn: false
+  normalize_eigen_for_hard_threshold: true
+  max_eigen_features_values: [2493.5, 186681.0, 188389.0, 0.3304, 188388.0, 1.0899, 0.9987]
+
+geometric_consistency:
+  recognizer_type: "Incremental" #"Simple", "Partitioned"
+  # Higher resolutions lead to higher tolerances.
+  resolution: 0.4
+  # Minimum number of matches necessary to consider cluster.
+  min_cluster_size: 6
+  # Maximum consistency distance between two matches in order for them to be cached as candidates.
+  # Used in the incremental recognizer only.
+  max_consistency_distance_for_caching: 3.0
+  local_map_radius: 100
+
+semantic_relocalization:
+  mode: relocalization # localization, relocalization
+  evalute: false
+
+  downsample_leaf_size: 1.0 # For constructing global map.
+  max_num_frames_in_local_map: 3 # 100*100 m^2
+  min_num_frames_in_local_map: 1 # 100*100 m^2
+
+  distance_to_lower_target_cloud_for_viz_m: 10.0
+
+middle_out_graph_matcher:
+
+# labels: 
+#   0 : "unlabeled"
+#   1 : "outlier"
+#   10: "car"
+#   11: "bicycle"
+#   13: "bus"
+#   15: "motorcycle"
+#   16: "on-rails"
+#   18: "truck"
+#   20: "other-vehicle"
+#   30: "person"
+#   31: "bicyclist"
+#   32: "motorcyclist"
+#   40: "road"
+#   44: "parking"
+#   48: "sidewalk"
+#   49: "other-ground"
+#   50: "building"
+#   51: "fence"
+#   52: "other-structure"
+#   60: "lane-marking"
+#   70: "vegetation"
+#   71: "trunk"
+#   72: "terrain"
+#   80: "pole"
+#   81: "traffic-sign"
+#   99: "other-object"
+#   252: "moving-car"
+#   253: "moving-bicyclist"
+#   254: "moving-person"
+#   255: "moving-motorcyclist"
+#   256: "moving-on-rails"
+#   257: "moving-bus"
+#   258: "moving-truck"
+#   259: "moving-other-vehicle"
