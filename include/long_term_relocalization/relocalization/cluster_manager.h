@@ -5,7 +5,7 @@
 
 #include <mutex>
 
-#include "relocalization/cluster.h"
+#include "long_term_relocalization/relocalization/cluster.h"
 
 namespace long_term_relocalization {
 

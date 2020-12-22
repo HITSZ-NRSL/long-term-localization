@@ -11,12 +11,12 @@
 #include <pcl/common/centroid.h>
 #include <pcl/common/common.h>
 
-#include "relocalization/serialize.h"
-#include "utils/common/common.h"
-#include "utils/common/pcl_utils.h"
+#include "common/log_out.h"
+#include "common/pcl_utils/pcl_utils.h"
+#include "long_term_relocalization/relocalization/serialize.h"
+#include "long_term_relocalization/utils/utils.h"
 
 namespace long_term_relocalization {
-
 
 struct DistAngle {
   DistAngle() = default;
@@ -86,7 +86,9 @@ public:
   bool is_observed_enough_times() const { return times_of_observed_ >= 5; }
   int update_observed_times() { ++times_of_observed_; }
 
-  bool is_static_pole() const { return times_of_observed() >= 7 && diameter() < 0.8 && height() > 0.9; }
+  bool is_static_pole() const {
+    return times_of_observed() >= 7 && diameter() < 0.8 && height() > 0.9;
+  }
 
 private:
   void ResetClusterCloudIntensity();
@@ -114,6 +116,5 @@ private:
   Cluster(const Cluster &&rhs) = delete;
   Cluster &operator=(const Cluster &rhs) = delete;
 };
-
 
 } // namespace long_term_relocalization

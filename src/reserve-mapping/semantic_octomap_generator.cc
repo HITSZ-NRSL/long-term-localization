@@ -17,8 +17,8 @@ SemanticOctoMapGenerator::SemanticOctoMapGenerator(float octree_size) {
   LOG(INFO) << "<------ SemanticOctoMapGenerator Generator Done ------>";
 }
 
-void SemanticOctoMapGenerator::AddKeyFrame(const common::Time &stamp,
-                                           const transform::Rigid3d &pose,
+void SemanticOctoMapGenerator::AddKeyFrame(const ros::Time &stamp,
+                                           const kindr::minimal::QuatTransformation &pose,
                                            const SemanticOctoMapGenerator::PointCloud &cloud_in) {
   KeyFrame<pcl_utils::PointRGBL>::Ptr semantic_keyframe =
       boost::make_shared<KeyFrame<pcl_utils::PointRGBL>>(stamp, pose, cloud_in);

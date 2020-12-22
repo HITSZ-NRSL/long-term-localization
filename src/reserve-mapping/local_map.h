@@ -8,7 +8,7 @@
 
 #include "mapping/dynamic_voxel_grid.h"
 #include "mapping/kdtree_points_neighbors_provider.h"
-#include "utils/common/pcl_types.h"
+#include "common/pcl_utils/pcl_types.h"
 #include "utils/transform/timestamped_transform.h"
 
 namespace long_term_relocalization {
@@ -60,7 +60,7 @@ public:
   /// \param new_cloud Vector of point clouds to be added.
   /// \param pose The new pose of the robot.
   void updatePoseAndAddPoints(const InputCloud &new_cloud /*in lidar frame*/,
-                              const transform::Rigid3d &pose /*in world frame*/);
+                              const kindr::minimal::QuatTransformation &pose /*in world frame*/);
 
   /// \brief Apply a pose transformation to the points contained in the local map.
   /// \remark Multiple transformations are cumulative.
@@ -116,7 +116,7 @@ public:
   }
 
 private:
-  std::vector<bool> updatePose(const transform::Rigid3d &pose);
+  std::vector<bool> updatePose(const kindr::minimal::QuatTransformation &pose);
   std::vector<int> addPointsAndGetCreatedVoxels(const InputCloud &new_cloud);
   std::vector<int> buildPointsMapping(const std::vector<bool> &is_point_removed,
                                       const std::vector<int> &new_points_indices);
@@ -157,7 +157,7 @@ LocalMap<InputPointT, ClusteredPointT>::LocalMap(
 
 template <typename InputPointT, typename ClusteredPointT>
 void LocalMap<InputPointT, ClusteredPointT>::updatePoseAndAddPoints(
-    const InputCloud &new_cloud, const transform::Rigid3d &pose) {
+    const InputCloud &new_cloud, const kindr::minimal::QuatTransformation &pose) {
   // BENCHMARK_BLOCK("SM.UpdateLocalMap");
 
   InputCloud cloud_out; // world frame
@@ -188,7 +188,7 @@ void LocalMap<InputPointT, ClusteredPointT>::updatePoseAndAddPoints(
 
 template <typename InputPointT, typename ClusteredPointT>
 std::vector<bool>
-LocalMap<InputPointT, ClusteredPointT>::updatePose(const transform::Rigid3d &pose) {
+LocalMap<InputPointT, ClusteredPointT>::updatePose(const kindr::minimal::QuatTransformation &pose) {
   // BENCHMARK_BLOCK("SM.UpdateLocalMap.UpdatePose");
 
   pcl::PointXYZ position;

@@ -1,7 +1,7 @@
 // Copyright (c) 2020. All rights reserved.
 // Author: lisilin013@163.com(Silin Li) on 2020/11/2.
 
-#include "relocalization/cluster_manager.h"
+#include "long_term_relocalization/relocalization/cluster_manager.h"
 
 namespace long_term_relocalization {
 
@@ -18,8 +18,8 @@ void ClustersManager::AddNewCluster(const ClustersManager::PointCloud::Ptr &clou
                                     int times_of_observed) {
   Eigen::Vector4f centroid;
   pcl::compute3DCentroid(*cloud_in, centroid);
-  this->NextCentroid() = common::Vector4fToPoint3d<PointT>(centroid);
-  this->NextCentroid2d() = common::Vector4fToPoint2d(centroid);
+  this->NextCentroid() = pcl_utils::Vector4fToPoint3d<PointT>(centroid);
+  this->NextCentroid2d() = pcl_utils::Vector4fToPoint2d(centroid);
 
   const int cluster_id = this->NextId();
   Cluster::Ptr cluster(new Cluster(cloud_in, cluster_id, this, times_of_observed));

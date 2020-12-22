@@ -2,10 +2,9 @@
 
 #include <vector>
 
-#include "relocalization/cluster_matcher.h"
+#include "long_term_relocalization/relocalization/cluster_matcher.h"
 
 namespace long_term_relocalization {
-
 
 /// \brief Base class for recognizing a model in a scene.
 class CorrespondenceRecognizer {
@@ -29,6 +28,5 @@ public:
   /// decreasing recognition quality order. If empty, the model was not recognized.
   virtual const std::vector<PairwiseMatches> &getCandidateClusters() const = 0;
 }; // class CorrespondenceRecognizer
-
 
 } // namespace long_term_relocalization

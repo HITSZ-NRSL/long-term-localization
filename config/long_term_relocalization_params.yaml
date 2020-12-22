@@ -68,7 +68,7 @@ geometric_consistency:
 
 
 relocalization:
-  mode: relocalization # localization, relocalization
+  mode: localization # localization, relocalization
   evalute: false
 
   remain_ratio: 1.0 # remain semantic cluster in global map randomly  to simulate the huge environmental changes.

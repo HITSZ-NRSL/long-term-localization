@@ -7,10 +7,10 @@
 
 #include <pcl/kdtree/flann.h>
 
-#include "depth_clustering/depth_clustering.h"
-#include "relocalization/cluster_manager.h"
-#include "relocalization/keyframe.h"
-#include "utils/params/params_types.h"
+#include "long_term_relocalization/depth_clustering/depth_clustering.h"
+#include "long_term_relocalization/relocalization/cluster_manager.h"
+#include "long_term_relocalization/relocalization/keyframe.h"
+#include "long_term_relocalization/utils/params_types.h"
 
 namespace long_term_relocalization {
 
@@ -21,14 +21,14 @@ class SemanticClusterMap {
   using KeyFramePtr = KeyFrame<PointT>::Ptr;
 
 public:
-  explicit SemanticClusterMap(const params::SemanticClusterMapParams &params);
+  explicit SemanticClusterMap(const SemanticClusterMapParams &params);
 
   virtual ~SemanticClusterMap() = default;
 
   void UpdateKeyFrame(const KeyFramePtr &kf);
 
-  const common::Time &latest_stamp() const { return latest_stamp_; }
-  const transform::Rigid3d &latest_pose() const { return latest_pose_; }
+  const ros::Time &latest_stamp() const { return latest_stamp_; }
+  const kindr::minimal::QuatTransformation &latest_pose() const { return latest_pose_; }
 
   ClustersManager *mutable_cluster_manager() { return &clusters_manager_; }
 
@@ -41,12 +41,12 @@ private:
   void RigisterClusters(const std::vector<PointCloud::Ptr> &clusters_cloud /*in local frame*/,
                         const Eigen::Matrix4d &pose);
 
-  params::SemanticClusterMapParams params_;
+  SemanticClusterMapParams params_;
 
   ClustersManager clusters_manager_;
 
-  common::Time latest_stamp_;
-  transform::Rigid3d latest_pose_;
+  ros::Time latest_stamp_;
+  kindr::minimal::QuatTransformation latest_pose_;
 
   pcl::KdTreeFLANN<Cluster::Point2d>::Ptr centroids2d_kdtree_; // Clusters centroids kdtree.
   std::unique_ptr<DepthClustering<PointT>> depth_clustering_;

@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
   google::InitGoogleLogging(argv[0]);
   FLAGS_colorlogtostderr = true;
   FLAGS_logtostderr = true;
-  gflags::ParseCommandLineFlags(&argc, &argv, true);
+  google::ParseCommandLineFlags(&argc, &argv, true);
   ros::init(argc, argv, "semantic_bag_writer_main");
 
   // Init bag writer.

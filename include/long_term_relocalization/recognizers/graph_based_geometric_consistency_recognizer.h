@@ -1,11 +1,11 @@
 #pragma once
+
 #include <boost/graph/adjacency_list.hpp>
 
-#include "relocalization/recognizers/correspondence_recognizer.h"
-#include "utils/params/params_types.h"
+#include "long_term_relocalization/recognizers/correspondence_recognizer.h"
+#include "long_term_relocalization/utils/params_types.h"
 
 namespace long_term_relocalization {
-
 
 /// \brief Recognizes a model in a scene using a graph-based approach. First a consistency graph
 /// is constructed, where the nodes represent the matches and edges connect matches that are
@@ -15,7 +15,7 @@ public:
   /// \brief Initializes a new instance of the GraphBasedGeometricConsistencyRecognizer class.
   /// \param params The parameters of the geometry consistency grouping.
   explicit GraphBasedGeometricConsistencyRecognizer(
-      const params::GeometricConsistencyParams &params) noexcept;
+      const GeometricConsistencyParams &params) noexcept;
 
   /// \brief Sets the current matches and tries to recognize the model.
   /// \param predicted_matches Vector of possible correspondences between model and scene.
@@ -48,7 +48,7 @@ protected:
   virtual ConsistencyGraph buildConsistencyGraph(const PairwiseMatches &predicted_matches) = 0;
 
   // The parameters of the geometry consistency grouping.
-  params::GeometricConsistencyParams params_;
+  GeometricConsistencyParams params_;
 
 private:
   // Estimate 3D transform between model and scene.
@@ -58,6 +58,5 @@ private:
   std::vector<Eigen::Matrix4f, Eigen::aligned_allocator<Eigen::Matrix4f>> candidate_transfomations_;
   std::vector<PairwiseMatches> candidate_matches_;
 }; // class GraphBasedGeometricConsistencyRecognizer
-
 
 } // namespace long_term_relocalization

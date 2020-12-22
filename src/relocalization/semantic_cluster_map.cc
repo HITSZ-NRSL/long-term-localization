@@ -1,7 +1,7 @@
 // Copyright (c) 2020. All rights reserved.
 // Author: lisilin013@163.com(Silin Li) on 20-10-22.
 
-#include "relocalization/semantic_cluster_map.h"
+#include "long_term_relocalization/relocalization/semantic_cluster_map.h"
 
 #include <pcl/registration/correspondence_estimation.h>
 #include <pcl/registration/correspondence_rejection.h>
@@ -13,8 +13,7 @@
 
 namespace long_term_relocalization {
 
-SemanticClusterMap::SemanticClusterMap(const params::SemanticClusterMapParams &params)
-    : params_(params) {
+SemanticClusterMap::SemanticClusterMap(const SemanticClusterMapParams &params) : params_(params) {
   centroids2d_kdtree_ = boost::make_shared<pcl::KdTreeFLANN<Cluster::Point2d>>();
   depth_clustering_ = std::make_unique<DepthClustering<PointT>>(params_.depth_clustering_params);
 }
@@ -25,7 +24,7 @@ void SemanticClusterMap::UpdateKeyFrame(const SemanticClusterMap::KeyFramePtr &k
   const std::vector<PointCloud::Ptr> clusters = depth_clustering_->ExtractClusters();
   const std::vector<PointCloud::Ptr> filtered_clusters = FilterClusters(clusters);
 
-  const Eigen::Matrix4d pose = transform::Rigid3dToMatrix4d(kf->pose());
+  const Eigen::Matrix4d pose = kf->pose().getTransformationMatrix();
   RigisterClusters(filtered_clusters, pose);
   latest_stamp_ = kf->stamp();
   latest_pose_ = kf->pose();
@@ -107,7 +106,7 @@ void SemanticClusterMap::RigisterClusters(
 
     Eigen::Vector4f centroid;
     pcl::compute3DCentroid(*cloud_out, centroid);
-    const Cluster::Point2d centroid2d = common::Vector4fToPoint2d(centroid);
+    const Cluster::Point2d centroid2d = pcl_utils::Vector4fToPoint2d(centroid);
 
     std::vector<int> k_indices;
     std::vector<float> k_distances;

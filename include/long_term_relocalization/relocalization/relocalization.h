@@ -24,22 +24,20 @@
 #include <tf/transform_listener.h>
 #include <visualization_msgs/Marker.h>
 
-#include "depth_clustering/depth_clustering.h"
-#include "relocalization/cluster_manager.h"
-#include "relocalization/keyframe.h"
-#include "relocalization/recognizers/correspondence_recognizer_factory.h"
-#include "relocalization/semantic_cluster_map.h"
-#include "utils/common/common.h"
-#include "utils/common/file_path.h"
-#include "utils/common/pcl_types.h"
-#include "utils/common/pcl_utils.h"
-#include "utils/common/tic_toc.h"
-#include "utils/params/params_types.h"
-#include "utils/ros_utils/pose_saver.h"
-#include "utils/ros_utils/ros_publisher.h"
-#include "utils/ros_utils/ros_utils.h"
-#include "utils/ros_utils/tf_transform_broadcaster.h"
-#include "utils/transform/rigid_transfrom.h"
+#include "common/file/file_path.h"
+#include "common/pcl_utils/pcl_types.h"
+#include "common/pcl_utils/pcl_utils.h"
+#include "common/ros_utils/ros_publisher.h"
+#include "common/ros_utils/ros_utils.h"
+#include "common/ros_utils/tf_transform_broadcaster.h"
+#include "common/tic_toc.h"
+#include "long_term_relocalization/depth_clustering/depth_clustering.h"
+#include "long_term_relocalization/recognizers/correspondence_recognizer_factory.h"
+#include "long_term_relocalization/relocalization/cluster_manager.h"
+#include "long_term_relocalization/relocalization/keyframe.h"
+#include "long_term_relocalization/relocalization/semantic_cluster_map.h"
+#include "long_term_relocalization/utils/params_types.h"
+#include "long_term_relocalization/utils/pose_saver.h"
 
 namespace long_term_relocalization {
 
@@ -52,7 +50,7 @@ class Relocalization {
       message_filters::sync_policies::ApproximateTime<sensor_msgs::PointCloud2, nav_msgs::Odometry>;
 
 public:
-  Relocalization(const params::RelocalizationParams &params, const ros::NodeHandle &nh);
+  Relocalization(const RelocalizationParams &params, const ros::NodeHandle &nh);
   virtual ~Relocalization();
 
 private:
@@ -81,7 +79,7 @@ private:
   void PublishLineSet(const PointPairs &point_pairs, const float line_scale, const Color &color);
 
   ros::NodeHandle nh_;
-  params::RelocalizationParams params_;
+  RelocalizationParams params_;
 
   ros_utils::RosPublisher<sensor_msgs::PointCloud2> source_point_cloud_map_publisher_;
   ros_utils::RosPublisher<sensor_msgs::PointCloud2> source_clusters_cloud_publisher_;
@@ -102,9 +100,9 @@ private:
   ros::Publisher localization_path_pub_;
 
   nav_msgs::Path localization_path_;
-  std::unique_ptr<ros_utils::PoseSaver> localization_pose_saver_;
-  std::unique_ptr<ros_utils::PoseSaver> relocalization_pose_saver_;
-  std::unique_ptr<ros_utils::PoseSaver> gt_pose_saver_;
+  std::unique_ptr<PoseSaver> localization_pose_saver_;
+  std::unique_ptr<PoseSaver> relocalization_pose_saver_;
+  std::unique_ptr<PoseSaver> gt_pose_saver_;
 
   // Preventing data racing!
   std::mutex keyframes_mutex_;
@@ -130,7 +128,7 @@ private:
 
   //-------- For Evalute --------
   bool have_recorded_relozlization_distance_ = false;
-  Point2d* first_local_pose_ = nullptr;
+  Point2d *first_local_pose_ = nullptr;
 };
 
 } // namespace long_term_relocalization

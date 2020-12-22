@@ -1,12 +1,11 @@
 // Copyright (c) 2020. All rights reserved.
 // Author: lisilin013@163.com(Silin Li) on 20-9-1.
 
-#include "depth_clustering/depth_clustering_utils.h"
+#include "long_term_relocalization/depth_clustering/depth_clustering_utils.h"
 
 #include <algorithm>
 
 namespace long_term_relocalization {
-
 
 int WrapCircularIndex(int x, int width) {
   if (x >= width) {
@@ -96,7 +95,7 @@ cv::Mat RenderRangeImage(const common::FixedArray2D<double> &range_image) {
       }
 
       const color::rgb rgb = colors[idx];
-      if (range_image(r, c) < common::kEpsilon) {
+      if (range_image(r, c) < math::kEpsilon) {
         depth_image.at<cv::Vec3b>(r, c) = cv::Vec3b(0, 0, 0);
       } else {
         depth_image.at<cv::Vec3b>(r, c) = cv::Vec3b(rgb[2], rgb[1], rgb[0]);
@@ -106,6 +105,5 @@ cv::Mat RenderRangeImage(const common::FixedArray2D<double> &range_image) {
 
   return depth_image;
 }
-
 
 } // namespace long_term_relocalization

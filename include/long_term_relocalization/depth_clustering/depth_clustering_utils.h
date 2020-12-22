@@ -7,11 +7,10 @@
 
 #include <opencv2/opencv.hpp>
 
-#include "utils/common/fixed_array2d.h"
-#include "utils/common/math.h"
+#include "common/fixed_array2d.h"
+#include "common/math/math.h"
 
 namespace long_term_relocalization {
-
 
 struct Index2D {
   Index2D() = default;
@@ -31,6 +30,5 @@ enum class PointLabel {
 int WrapCircularIndex(int x, int width);
 
 cv::Mat RenderRangeImage(const common::FixedArray2D<double> &range_image);
-
 
 } // namespace long_term_relocalization

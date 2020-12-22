@@ -14,16 +14,16 @@
 #include <glog/logging.h>
 
 #include <pcl/common/common.h>
-#include <pcl/filters/impl/filter.hpp>
+#include <pcl/filters/filter.h>
 
-#include "depth_clustering/depth_clustering_utils.h"
-#include "depth_clustering/ground_plane_fitter.h"
-#include "depth_clustering/range_image_constructor.h"
-#include "utils/common/fixed_array2d.h"
-#include "utils/common/math.h"
-#include "utils/common/pcl_utils.h"
-#include "utils/common/tic_toc.h"
-#include "utils/params/params_types.h"
+#include "common/fixed_array2d.h"
+#include "common/math/math.h"
+#include "common/pcl_utils/pcl_utils.h"
+#include "common/tic_toc.h"
+#include "long_term_relocalization/depth_clustering/depth_clustering_utils.h"
+#include "long_term_relocalization/depth_clustering/ground_plane_fitter.h"
+#include "long_term_relocalization/depth_clustering/range_image_constructor.h"
+#include "long_term_relocalization/utils/params_types.h"
 
 namespace long_term_relocalization {
 
@@ -36,9 +36,7 @@ template <typename PointT> class DepthClustering {
   using PointCloud = pcl::PointCloud<PointT>;
 
 public:
-  explicit DepthClustering(const params::DepthClusteringParams &params) : params_(params) {
-    Initialize();
-  }
+  explicit DepthClustering(const DepthClusteringParams &params) : params_(params) { Initialize(); }
   virtual ~DepthClustering() = default;
 
   void Process(const PointCloud &cloud_in) {
@@ -113,13 +111,13 @@ private:
     std::vector<double> sorted_vert_angles(params_.vert_angles);
     std::sort(sorted_vert_angles.begin(), sorted_vert_angles.end(), std::greater<double>());
     for (const double &vert_angle : sorted_vert_angles) {
-      sin_verts_.push_back(std::sin(common::DegToRad(vert_angle)));
-      cos_verts_.push_back(std::cos(common::DegToRad(vert_angle)));
+      sin_verts_.push_back(std::sin(math::DegToRad(vert_angle)));
+      cos_verts_.push_back(std::cos(math::DegToRad(vert_angle)));
     }
     CHECK_EQ(sin_verts_.size(), height_);
     for (int i = 1; i < sorted_vert_angles.size(); ++i) {
       const double diff_angle =
-          common::DegToRad(std::abs(sorted_vert_angles[i] - sorted_vert_angles[i - 1]));
+          math::DegToRad(std::abs(sorted_vert_angles[i] - sorted_vert_angles[i - 1]));
       sin_diff_verts_.push_back(std::sin(diff_angle));
       cos_diff_verts_.push_back(std::cos(diff_angle));
     }
@@ -271,7 +269,7 @@ private:
     const PointT &point_left = points_image(left.row, left.col).front();
     const PointT &point_right = points_image(right.row, right.col).front();
 
-    const float distance = common::DistanceBetweenTwoPoints(point_left, point_right);
+    const float distance = pcl_utils::DistanceBetweenTwoPoints(point_left, point_right);
     return distance < params_.max_cluster_distance;
 
     if (distance < params_.max_cluster_distance) {
@@ -334,7 +332,7 @@ private:
            (cluster_cloud.size() > params_.min_cluster_size);
   }
 
-  params::DepthClusteringParams params_;
+  DepthClusteringParams params_;
   int width_;
   int height_;
   std::unique_ptr<RangeImageConstructor<PointT>> range_image_constructor_;

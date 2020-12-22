@@ -1,12 +1,12 @@
-#include "relocalization/recognizers/incremental_geometric_consistency_recognizer.h"
+#include "long_term_relocalization/recognizers/incremental_geometric_consistency_recognizer.h"
 
 #include <limits>
 #include <vector>
 
 #include <glog/logging.h>
 
-#include "relocalization/recognizers/graph_utilities.h"
-#include "relocalization/recognizers/matches_partitioner.h"
+#include "long_term_relocalization/recognizers/graph_utilities.h"
+#include "long_term_relocalization/recognizers/matches_partitioner.h"
 
 namespace long_term_relocalization {
 
@@ -14,7 +14,7 @@ constexpr size_t IncrementalGeometricConsistencyRecognizer::kNoMatchIndex_;
 constexpr size_t IncrementalGeometricConsistencyRecognizer::kNoCacheSlotIndex_;
 
 IncrementalGeometricConsistencyRecognizer::IncrementalGeometricConsistencyRecognizer(
-    const params::GeometricConsistencyParams &params, const float max_model_radius) noexcept
+    const GeometricConsistencyParams &params, const float max_model_radius) noexcept
     : GraphBasedGeometricConsistencyRecognizer(params),
       max_consistency_distance_(max_model_radius * 2.0 + params.resolution),
       max_consistency_distance_for_caching_(params.max_consistency_distance_for_caching +

@@ -1,10 +1,9 @@
 #pragma once
 
-#include "relocalization/recognizers/correspondence_recognizer.h"
-#include "utils/params/params_types.h"
+#include "long_term_relocalization/recognizers/correspondence_recognizer.h"
+#include "long_term_relocalization/utils/params_types.h"
 
 namespace long_term_relocalization {
-
 
 /// \brief Recognizes a model in a scene using the \c GeometricConsistencyRecognizer implementation
 /// provided by the PCL. Recognition finds a subset of centroids in the model whose pairwise
@@ -13,7 +12,7 @@ class GeometricConsistencyRecognizer : public CorrespondenceRecognizer {
 public:
   /// \brief Initializes a new instance of the GeometricConsistencyRecognizer class.
   /// \param params The parameters of the geometry consistency grouping.
-  GeometricConsistencyRecognizer(const params::GeometricConsistencyParams &params) noexcept
+  GeometricConsistencyRecognizer(const GeometricConsistencyParams &params) noexcept
       : params_(params) {}
 
   /// \brief Sets the current matches and tries to recognize the model.
@@ -42,8 +41,7 @@ private:
   std::vector<PairwiseMatches> candidate_matches_;
 
   // The parameters of the geometry consistency grouping.
-  params::GeometricConsistencyParams params_;
+  GeometricConsistencyParams params_;
 }; // class GeometricConsistencyRecognizer
-
 
 } // namespace long_term_relocalization

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "relocalization/recognizers/graph_based_geometric_consistency_recognizer.h"
-#include "utils/params/params_types.h"
+#include "long_term_relocalization/recognizers/graph_based_geometric_consistency_recognizer.h"
+#include "long_term_relocalization/utils/params_types.h"
 
 namespace long_term_relocalization {
 
@@ -20,7 +20,7 @@ public:
   /// \brief Initializes a new instance of the PartitionedGeometricConsistencyRecognizer class.
   /// \param params The parameters of the geometry consistency grouping.
   /// \param max_model_radius Radius of the bounding cylinder of the model.
-  PartitionedGeometricConsistencyRecognizer(const params::GeometricConsistencyParams &params,
+  PartitionedGeometricConsistencyRecognizer(const GeometricConsistencyParams &params,
                                             float max_model_radius) noexcept;
 
 protected:
@@ -47,6 +47,5 @@ private:
 
   float partition_size_;
 }; // class PartitionedGeometricConsistencyRecognizer
-
 
 } // namespace long_term_relocalization

@@ -19,7 +19,7 @@
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 
-#include "utils/common/pcl_types.h"
+#include "common/pcl_utils/pcl_types.h"
 
 namespace long_term_relocalization {
 namespace mapping {

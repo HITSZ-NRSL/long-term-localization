@@ -1,7 +1,9 @@
 // Copyright (c) 2020. All rights reserved.
 // Author: lisilin013@163.com(Silin Li) on 2020/11/2.
 
-#include "relocalization/cluster_matcher.h"
+#include "long_term_relocalization/relocalization/cluster_matcher.h"
+
+#include "long_term_relocalization/utils/utils.h"
 
 namespace long_term_relocalization {
 

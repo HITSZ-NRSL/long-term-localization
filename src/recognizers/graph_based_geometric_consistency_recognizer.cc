@@ -1,17 +1,17 @@
-#include "relocalization/recognizers/graph_based_geometric_consistency_recognizer.h"
+#include "long_term_relocalization/recognizers/graph_based_geometric_consistency_recognizer.h"
 
 #include <algorithm>
 #include <vector>
 
 #include <glog/logging.h>
 
-#include "relocalization/recognizers/graph_utilities.h"
+#include "long_term_relocalization/recognizers/graph_utilities.h"
 
 namespace long_term_relocalization {
 
 
 GraphBasedGeometricConsistencyRecognizer::GraphBasedGeometricConsistencyRecognizer(
-    const params::GeometricConsistencyParams &params) noexcept
+    const GeometricConsistencyParams &params) noexcept
     : params_(params) {}
 
 void GraphBasedGeometricConsistencyRecognizer::recognize(const PairwiseMatches &predicted_matches) {

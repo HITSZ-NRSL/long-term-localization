@@ -18,9 +18,9 @@
 #include <pcl/filters/extract_indices.h>
 #include <pcl/io/io.h>
 
-#include "utils/common/pcl_types.h"
-#include "utils/common/pcl_utils.h"
-#include "utils/params/params_types.h"
+#include "common/pcl_utils/pcl_types.h"
+#include "common/pcl_utils/pcl_utils.h"
+#include "long_term_relocalization/utils/params_types.h"
 
 namespace long_term_relocalization {
 
@@ -40,7 +40,7 @@ template <typename PointT> class GroundPlaneFitter {
   using PointCloudPtr = typename PointCloud::Ptr;
 
 public:
-  explicit GroundPlaneFitter(const params::GroundPlaneFitterParams &params) : params_(params) {
+  explicit GroundPlaneFitter(const GroundPlaneFitterParams &params) : params_(params) {
     static_assert(pcl::traits::has_xyz<PointT>::value,
                   "PointT must be a structure containing XYZ coordinates");
   }
@@ -225,7 +225,7 @@ private:
   }
 
 private:
-  params::GroundPlaneFitterParams params_;
+  GroundPlaneFitterParams params_;
 };
 
 } // namespace long_term_relocalization

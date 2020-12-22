@@ -10,16 +10,16 @@
 #include <octomap/OcTree.h>
 #include <octomap/octomap.h>
 
-#include "utils/common/pcl_utils.h"
-#include "utils/params/params_types.h"
-#include "utils/transform/rigid_transfrom.h"
+#include "common/pcl_utils/pcl_utils.h"
+#include "kindr/minimal/quat-transformation.h"
+#include "long_term_relocalization/utils/params_types.h"
 
 namespace long_term_relocalization {
 namespace mapping {
 
 class GroundOctoMap {
 public:
-  explicit GroundOctoMap(const params::GroundOctoMapParams &params) : params_(params) {
+  explicit GroundOctoMap(const GroundOctoMapParams &params) : params_(params) {
     octree_ = std::make_unique<octomap::OcTree>(params_.octomap_resolution);
   }
   virtual ~GroundOctoMap() = default;
@@ -27,10 +27,10 @@ public:
   // road label: 0
   // sidewalk label: 1
   void UpdatePointCloud(const pcl_utils::PointIRLCloud &semantic_cloud,
-                        const transform::Rigid3d &transform) {
+                        const kindr::minimal::QuatTransformation &transform) {
     pcl_utils::PointICloud::Ptr cloud_out(new pcl_utils::PointICloud());
     common::ExtractSemanticPoints(semantic_cloud, params_.ground_semantic_label, cloud_out);
-    pcl::transformPointCloud(*cloud_out, *cloud_out, transform::Rigid3dToMatrix4d(transform));
+    pcl::transformPointCloud(*cloud_out, *cloud_out, transform.getTransformationMatrix());
     for (const auto &pt : cloud_out->points) {
       const octomap::point3d pt3d(pt.x, pt.y, pt.z);
       octree_->updateNode(pt3d, true);
@@ -40,7 +40,7 @@ public:
   const octomap::OcTree &get_octo_map() const { return *octree_; }
 
 private:
-  params::GroundOctoMapParams params_;
+  GroundOctoMapParams params_;
   std::unique_ptr<octomap::OcTree> octree_;
 };
 

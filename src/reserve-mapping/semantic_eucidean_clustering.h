@@ -8,9 +8,9 @@
 #include <pcl/filters/extract_indices.h>
 #include <pcl/segmentation/extract_clusters.h>
 
-#include "relocalization/cluster.h"
-#include "utils/common/pcl_utils.h"
-#include "utils/params/params_types.h"
+#include "long_term_relocalization/relocalization/cluster.h"
+#include "common/pcl_utils/pcl_utils.h"
+#include "long_term_relocalization/utils/params_types.h"
 
 namespace long_term_relocalization {
 
@@ -21,7 +21,7 @@ class SemanticEucideanClustering {
   using PointCloud = pcl_utils::PointIRLCloud;
 
 public:
-  explicit SemanticEucideanClustering(const params::SemanticEucideanClusteringParams &params);
+  explicit SemanticEucideanClustering(const SemanticEucideanClusteringParams &params);
 
   virtual ~SemanticEucideanClustering() = default;
 
@@ -49,7 +49,7 @@ public:
 private:
   std::vector<pcl::PointIndices> EucideanSegmentation(
       const PointCloud::Ptr &cloud,
-      params::SemanticEucideanClusteringParams::ObjectEucideanParams &obj_eucidean_params);
+      SemanticEucideanClusteringParams::ObjectEucideanParams &obj_eucidean_params);
 
   std::vector<pcl::PointIndices> SemanticEucideanSegmentation(const PointCloud::Ptr &cloud,
                                                               const std::vector<int> &seed_indices);
@@ -58,7 +58,7 @@ private:
 
   void ResetParams();
 
-  params::SemanticEucideanClusteringParams params_;
+  SemanticEucideanClusteringParams params_;
   std::unordered_map<int /*label*/, PointCloud::Ptr> seed_points_;
   std::unordered_map<int /*label*/, std::vector<Cluster::Ptr>> raw_clusters_;
 };

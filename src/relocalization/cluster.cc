@@ -1,15 +1,14 @@
 // Copyright (c) 2020. All rights reserved.
 // Author: lisilin013@163.com(Silin Li) on 2020/10/21.
 
-#include "relocalization/cluster.h"
+#include "long_term_relocalization/relocalization/cluster.h"
 
 #include <numeric>
 
-#include "relocalization/cluster_manager.h"
-#include "utils/common/math.h"
+#include "common/math/math.h"
+#include "long_term_relocalization/relocalization/cluster_manager.h"
 
 namespace long_term_relocalization {
-
 
 //============================================================
 // Cluster Implementation
@@ -22,9 +21,9 @@ Cluster::Cluster(const PointCloud::Ptr &cloud, int id, ClustersManager *clusters
 
   Eigen::Vector4f min_vec, max_vec;
   pcl::getMinMax3D(*cloud_, min_vec, max_vec);
-  min_point_ = common::Vector4fToPoint3d<PointT>(min_vec);
-  max_point_ = common::Vector4fToPoint3d<PointT>(max_vec);
-  diameter_ = common::ComputeXYDiameter(min_point_, max_point_);
+  min_point_ = pcl_utils::Vector4fToPoint3d<PointT>(min_vec);
+  max_point_ = pcl_utils::Vector4fToPoint3d<PointT>(max_vec);
+  diameter_ = pcl_utils::ComputeXYDiameter(min_point_, max_point_);
   label_ = static_cast<int>(cloud_->front().label);
 
   ResetClusterCloudIntensity();
@@ -66,7 +65,7 @@ void Cluster::MergeCloud(const PointCloud::Ptr &cloud_in) {
   max_point_.x = std::max(max_point_.x, max_vec.x());
   max_point_.y = std::max(max_point_.y, max_vec.y());
   max_point_.z = std::max(max_point_.z, max_vec.z());
-  diameter_ = common::ComputeXYDiameter(min_point_, max_point_);
+  diameter_ = pcl_utils::ComputeXYDiameter(min_point_, max_point_);
 
   ++times_of_observed_;
 }
@@ -101,6 +100,5 @@ void Cluster::ResetMergeCloudIntensity(const PointCloud::Ptr &cloud_in) {
     pt.intensity = intensity;
   }
 }
-
 
 } // namespace long_term_relocalization

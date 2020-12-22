@@ -18,9 +18,9 @@
 
 #include "mapping/keyframe.h"
 #include "mapping/local_map.h"
-#include "utils/common/file_path.h"
-#include "utils/common/pcl_types.h"
-#include "utils/transform/rigid_transfrom.h"
+#include "common/file/file_path.h"
+#include "common/pcl_utils/pcl_types.h"
+#include "kindr/minimal/quat-transformation.h"
 
 #include "semantic_octomap/semantic_octree.h"
 
@@ -33,13 +33,13 @@ class SemanticOctoMapGenerator {
 public:
   typedef std::unique_ptr<SemanticOctoMapGenerator> UniqPtr;
   explicit SemanticOctoMapGenerator(float octree_size);
-  void AddKeyFrame(const common::Time &stamp, const transform::Rigid3d &pose,
+  void AddKeyFrame(const ros::Time &stamp, const kindr::minimal::QuatTransformation &pose,
                    const PointCloud &cloud_in);
   const octomap::SemanticOcTree &GenerateGlobalSemanticOctoMap();
   void UpdateSemanticGlobalCloudMap();
   const PointCloud &GenerateGlobalSemanticPointCloudMap();
   int num_semantic_keyframes() const { return semantic_keyframes_.size(); }
-  const common::Time &get_latest_time() {
+  const ros::Time &get_latest_time() {
     CHECK(!semantic_keyframes_.empty());
     return semantic_keyframes_.back()->stamp();
   }

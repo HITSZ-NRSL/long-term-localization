@@ -7,8 +7,8 @@
 
 #include <pcl/filters/statistical_outlier_removal.h>
 
-#include "utils/common/pcl_types.h"
-#include "utils/params/params_types.h"
+#include "common/pcl_utils/pcl_types.h"
+#include "long_term_relocalization/utils/params_types.h"
 
 namespace long_term_relocalization {
 namespace mapping {
@@ -18,7 +18,7 @@ template <typename PointT> class Preprocessor {
   using PointCloudPtr = typename PointCloud::Ptr;
 
 public:
-  explicit Preprocessor(const params::PreprocessorParams &params) {
+  explicit Preprocessor(const PreprocessorParams &params) {
     sor_ = boost::make_shared<pcl::StatisticalOutlierRemoval<PointT>>();
     sor_->setMeanK(params.sor_noise_meank);
     sor_->setStddevMulThresh(params.sor_noise_stddev_multhresh);

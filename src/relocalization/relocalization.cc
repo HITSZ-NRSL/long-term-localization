@@ -1,14 +1,13 @@
 // Copyright (c) 2020. All rights reserved.
 // Author: lisilin013@163.com(Silin Li) on 2020/10/19.
 
-#include "relocalization/relocalization.h"
+#include "long_term_relocalization/relocalization/relocalization.h"
 
-#include "utils/common/constants.h"
+#include "long_term_relocalization/utils/constants.h"
 
 namespace long_term_relocalization {
 
-Relocalization::Relocalization(const params::RelocalizationParams &params,
-                               const ros::NodeHandle &nh)
+Relocalization::Relocalization(const RelocalizationParams &params, const ros::NodeHandle &nh)
     : params_(params), nh_(nh),
       source_point_cloud_map_publisher_(kSourcePointCloudMapTopic, 5, kOdomFrameId),
       source_clusters_cloud_publisher_(kSourceClustersCloudTopic, 5, kOdomFrameId),
@@ -65,12 +64,12 @@ void Relocalization::Initialize() {
     recognizer_ = recognizer_factory.create();
 
     if (params_.evalute) {
-      localization_pose_saver_ = std::make_unique<ros_utils::PoseSaver>(
-          file::PathJoin(ros_utils::GetDataDirectoryPath(), "localization.txt"));
-      relocalization_pose_saver_ = std::make_unique<ros_utils::PoseSaver>(
-          file::PathJoin(ros_utils::GetDataDirectoryPath(), "relocalization.txt"));
-      gt_pose_saver_ = std::make_unique<ros_utils::PoseSaver>(
-          file::PathJoin(ros_utils::GetDataDirectoryPath(), "gt.txt"));
+      localization_pose_saver_ =
+          std::make_unique<PoseSaver>(file::PathJoin(GetDataDirectoryPath(), "localization.txt"));
+      relocalization_pose_saver_ =
+          std::make_unique<PoseSaver>(file::PathJoin(GetDataDirectoryPath(), "relocalization.txt"));
+      gt_pose_saver_ =
+          std::make_unique<PoseSaver>(file::PathJoin(GetDataDirectoryPath(), "gt.txt"));
     }
   }
 
@@ -95,18 +94,18 @@ void Relocalization::PublishTargetClusterMap() {
   static PointCloud target_cluster_centroids;
   if (first) {
     target_cluster_cloud = *target_clusters_manager_.GetClustersCloud();
-    common::TranslateCloud(Eigen::Vector3d(0, 0, -params_.distance_to_lower_target_cloud_for_viz_m),
-                           &target_cluster_cloud);
+    pcl_utils::TranslateCloud(
+        Eigen::Vector3d(0, 0, -params_.distance_to_lower_target_cloud_for_viz_m),
+        &target_cluster_cloud);
     target_cluster_centroids = *target_clusters_manager_.centroids_cloud();
-    common::TranslateCloud(Eigen::Vector3d(0, 0, -params_.distance_to_lower_target_cloud_for_viz_m),
-                           &target_cluster_centroids);
+    pcl_utils::TranslateCloud(
+        Eigen::Vector3d(0, 0, -params_.distance_to_lower_target_cloud_for_viz_m),
+        &target_cluster_centroids);
     first = false;
   }
-  target_clusters_cloud_publisher_.Publish(target_cluster_cloud,
-                                           ros_utils::FromRosTime(ros::Time::now()));
+  target_clusters_cloud_publisher_.Publish(target_cluster_cloud, ros::Time::now());
 
-  target_clusters_centroids_publisher_.Publish(target_cluster_centroids,
-                                               ros_utils::FromRosTime(ros::Time::now()));
+  target_clusters_centroids_publisher_.Publish(target_cluster_centroids, ros::Time::now());
 }
 
 void Relocalization::CloudPoseCallback(const sensor_msgs::PointCloud2ConstPtr &cloud_msg,
@@ -116,20 +115,17 @@ void Relocalization::CloudPoseCallback(const sensor_msgs::PointCloud2ConstPtr &c
   pcl_utils::PointIRLCloud::Ptr semantic_cloud(new pcl_utils::PointIRLCloud());
   pcl::fromROSMsg(*cloud_msg, *semantic_cloud);
 
-  transform::Rigid3d trans;
-  trans.mutable_translation()->x() = pose->pose.pose.position.x;
-  trans.mutable_translation()->y() = pose->pose.pose.position.y;
-  trans.mutable_translation()->z() = pose->pose.pose.position.z;
-  trans.mutable_rotation()->x() = pose->pose.pose.orientation.x;
-  trans.mutable_rotation()->y() = pose->pose.pose.orientation.y;
-  trans.mutable_rotation()->z() = pose->pose.pose.orientation.z;
-  trans.mutable_rotation()->w() = pose->pose.pose.orientation.w;
+  const kindr::minimal::Position position(pose->pose.pose.position.x, pose->pose.pose.position.y,
+                                          pose->pose.pose.position.z);
+  const kindr::minimal::RotationQuaternion rotation(
+      pose->pose.pose.orientation.w, pose->pose.pose.orientation.x, pose->pose.pose.orientation.y,
+      pose->pose.pose.orientation.z);
+  const kindr::minimal::QuatTransformation trans(position, rotation);
 
   tf_odom_lidar_publisher_.Publish(*pose);
 
-  const common::Time stamp = ros_utils::FromRosTime(cloud_msg->header.stamp);
-  KeyFramePtr keyframe =
-      boost::make_shared<KeyFrame<pcl_utils::PointIRL>>(stamp, trans, *semantic_cloud);
+  KeyFramePtr keyframe = boost::make_shared<KeyFrame<pcl_utils::PointIRL>>(cloud_msg->header.stamp,
+                                                                           trans, *semantic_cloud);
 
   std::unique_lock<std::mutex> lock1(keyframes_mutex_);
   keyframes_.push(keyframe);
@@ -152,7 +148,7 @@ void Relocalization::LaserOdometryCallback(const nav_msgs::OdometryConstPtr &odo
   }
 
   const pcl_utils::Point odom_pose(odom->pose.pose.position.x, odom->pose.pose.position.y,
-                                odom->pose.pose.position.z);
+                                   odom->pose.pose.position.z);
   const Eigen::Transform<float, 3, Eigen::Affine> transform(map_lidar_transform_);
   const pcl_utils::Point map_pose = pcl::transformPoint(odom_pose, transform);
 
@@ -164,7 +160,8 @@ void Relocalization::LaserOdometryCallback(const nav_msgs::OdometryConstPtr &odo
   }
 }
 
-void Relocalization::UpdatePathAndPublish(const pcl_utils::Point &map_pose, const ros::Time &stamp) {
+void Relocalization::UpdatePathAndPublish(const pcl_utils::Point &map_pose,
+                                          const ros::Time &stamp) {
   geometry_msgs::PoseStamped pose_stamped;
   pose_stamped.header.stamp = stamp;
   pose_stamped.header.frame_id = kMapFrameId;
@@ -251,8 +248,7 @@ void Relocalization::RelocalizationThread() {
     if (!matches.empty()) {
       PublisherMatches(matches);
       if (relocalization_pose_saver_) {
-        relocalization_pose_saver_->Write(
-            trans_map_odom, ros_utils::ToRosTime(semantic_cluster_map_->latest_stamp()));
+        relocalization_pose_saver_->Write(trans_map_odom, semantic_cluster_map_->latest_stamp());
       }
     }
   }
@@ -270,9 +266,9 @@ PairwiseMatches Relocalization::RunSemanticClusterMatcher() {
   // ComputeMiddleOutDescriptors
   //----------------------------------------------------------
   SEGMENT_TIME_BEGIN(ComputeMiddleOutDescriptors);
-  const transform::Rigid3d &latest_pose = semantic_cluster_map_->latest_pose();
+  const kindr::minimal::QuatTransformation &latest_pose = semantic_cluster_map_->latest_pose();
   const Point2d local_map_origin(
-      {.x = latest_pose.translation().x(), .y = latest_pose.translation().y()});
+      {.x = latest_pose.getPosition().x(), .y = latest_pose.getPosition().y()});
 
   source_cluster_manager->ComputeMiddleOutDescriptors(params_.search_radius, local_map_origin,
                                                       params_.local_cluster_size);
@@ -306,7 +302,7 @@ PairwiseMatches Relocalization::RunSemanticClusterMatcher() {
 
     //   // Record match size.
     //   std::ofstream outfile(
-    //       file::PathJoin(ros_utils::GetDataDirectoryPath(), "relocalization_distance.txt"),
+    //       file::PathJoin(GetDataDirectoryPath(), "relocalization_distance.txt"),
     //       std::ios_base::app | std::ios_base::out);
     //   CHECK(outfile.good() && outfile.is_open());
     //   const double distance = std::sqrt((first_local_pose_->x - local_map_origin.x) *
@@ -363,7 +359,7 @@ PairwiseMatches Relocalization::RunSemanticClusterMatcher() {
   is_relocalization_successful_ = true;
 
   // Record match size.
-  // static std::ofstream outfile(file::PathJoin(ros_utils::GetDataDirectoryPath(), "tmp.txt"));
+  // static std::ofstream outfile(file::PathJoin(GetDataDirectoryPath(), "tmp.txt"));
   // CHECK(outfile.good() && outfile.is_open());
   // outfile << matches.size() << std::endl;
   return matches;

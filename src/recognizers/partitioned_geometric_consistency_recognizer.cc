@@ -1,4 +1,4 @@
-#include "relocalization/recognizers/partitioned_geometric_consistency_recognizer.h"
+#include "long_term_relocalization/recognizers/partitioned_geometric_consistency_recognizer.h"
 
 #include <algorithm>
 #include <vector>
@@ -6,13 +6,13 @@
 #include <boost/graph/adjacency_list.hpp>
 #include <glog/logging.h>
 
-#include "relocalization/recognizers/graph_utilities.h"
-#include "relocalization/recognizers/matches_partitioner.h"
+#include "long_term_relocalization/recognizers/graph_utilities.h"
+#include "long_term_relocalization/recognizers/matches_partitioner.h"
 
 namespace long_term_relocalization {
 
 PartitionedGeometricConsistencyRecognizer::PartitionedGeometricConsistencyRecognizer(
-    const params::GeometricConsistencyParams &params, float max_model_radius) noexcept
+    const GeometricConsistencyParams &params, float max_model_radius) noexcept
     : GraphBasedGeometricConsistencyRecognizer(params), partition_size_(max_model_radius * 2.0f) {}
 
 inline size_t PartitionedGeometricConsistencyRecognizer::findAndAddInPartitionConsistencies(

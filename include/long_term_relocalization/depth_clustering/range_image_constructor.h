@@ -8,15 +8,13 @@
 
 #include <glog/logging.h>
 
-#include "depth_clustering/depth_clustering_utils.h"
-#include "utils/common/fixed_array2d.h"
-#include "utils/common/math.h"
-#include "utils/common/pcl_utils.h"
-#include "utils/common/common.h"
-#include "utils/params/params_types.h"
+#include "common/fixed_array2d.h"
+#include "common/math/math.h"
+#include "common/pcl_utils/pcl_utils.h"
+#include "long_term_relocalization/depth_clustering/depth_clustering_utils.h"
+#include "long_term_relocalization/utils/params_types.h"
 
 namespace long_term_relocalization {
-
 
 // Note: this class is designed for rs80 lidar.
 template <typename PointT /*MUST contain ring field*/> class RangeImageConstructor {
@@ -31,7 +29,8 @@ public:
   };
 
   RangeImageConstructor(const Options &options) : width_(options.width), height_(options.height) {
-    points_image_ = common::FixedArray2D<std::vector<PointT>>(height_, width_, std::vector<PointT>());
+    points_image_ =
+        common::FixedArray2D<std::vector<PointT>>(height_, width_, std::vector<PointT>());
     range_image_ = common::FixedArray2D<double>(height_, width_, 0);
     label_image_ = common::FixedArray2D<PointLabel>(height_, width_, PointLabel::kNone);
 
@@ -114,7 +113,7 @@ private:
       const int real_col = WrapCircularIndex(col, width_);
 
       const double range = pcl_utils::PointLength(point);
-      if (range < common::kEpsilon) {
+      if (range < math::kEpsilon) {
         continue;
       }
 
@@ -151,7 +150,7 @@ private:
     //     // LOG(INFO) << estimate_col << " " << real_col << " " << col_offset_[real_row];
 
     //     range_image_(real_row, real_col) = pcl_utils::PointLength(point);
-    //     if (range_image_(real_row, real_col) > common::kEpsilon) {
+    //     if (range_image_(real_row, real_col) > math::kEpsilon) {
     //       points_image_(real_row, real_col) = point;
     //       label_image_(real_row, real_col) = PointLabel::kUnProcessed;
     //     }
@@ -183,6 +182,5 @@ private:
   std::vector<int> beam_ring_table_; // beam_ring_table_[fake_row] = real row
   std::vector<int> col_offset_;      // col_offset_[real_row] = real col offset
 };
-
 
 } // namespace long_term_relocalization

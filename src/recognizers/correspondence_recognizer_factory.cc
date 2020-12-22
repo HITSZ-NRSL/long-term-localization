@@ -1,14 +1,14 @@
-#include "relocalization/recognizers/correspondence_recognizer_factory.h"
+#include "long_term_relocalization/recognizers/correspondence_recognizer_factory.h"
 
-#include "relocalization/recognizers/geometric_consistency_recognizer.h"
-#include "relocalization/recognizers/incremental_geometric_consistency_recognizer.h"
-#include "relocalization/recognizers/partitioned_geometric_consistency_recognizer.h"
+#include "long_term_relocalization/recognizers/geometric_consistency_recognizer.h"
+#include "long_term_relocalization/recognizers/incremental_geometric_consistency_recognizer.h"
+#include "long_term_relocalization/recognizers/partitioned_geometric_consistency_recognizer.h"
 
 namespace long_term_relocalization {
 
 
 CorrespondenceRecognizerFactory::CorrespondenceRecognizerFactory(
-    const params::GeometricConsistencyParams &params)
+    const GeometricConsistencyParams &params)
     : params_(params) {}
 
 std::unique_ptr<CorrespondenceRecognizer> CorrespondenceRecognizerFactory::create() const {

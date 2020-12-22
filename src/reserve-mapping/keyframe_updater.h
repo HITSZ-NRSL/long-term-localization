@@ -5,7 +5,7 @@
 
 #include <cmath>
 
-#include "utils/transform/rigid_transfrom.h"
+#include "kindr/minimal/quat-transformation.h"
 
 namespace long_term_relocalization {
 namespace mapping {
@@ -21,7 +21,7 @@ public:
   virtual ~KeyframeUpdater() = default;
 
   // Return true if the frame should be registered
-  bool UpdatePose(const transform::Rigid3d &pose);
+  bool UpdatePose(const kindr::minimal::QuatTransformation &pose);
 
   // The last keyframe's accumulated distance from the first keyframe.
   double get_accumulate_distance() const { return accumulate_distance_; }
@@ -32,7 +32,7 @@ private:
 
   bool is_initialized_ = false;
   double accumulate_distance_ = 0.0;
-  transform::Rigid3d prev_keypose_;
+  kindr::minimal::QuatTransformation prev_keypose_;
 };
 
 } // namespace mapping

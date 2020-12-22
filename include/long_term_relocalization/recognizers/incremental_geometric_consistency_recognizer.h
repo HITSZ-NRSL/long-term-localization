@@ -4,11 +4,10 @@
 
 #include <boost/graph/adjacency_list.hpp>
 
-#include "relocalization/recognizers/graph_based_geometric_consistency_recognizer.h"
-#include "relocalization/recognizers/matches_partitioner.h"
+#include "long_term_relocalization/recognizers/graph_based_geometric_consistency_recognizer.h"
+#include "long_term_relocalization/recognizers/matches_partitioner.h"
 
 namespace long_term_relocalization {
-
 
 /// \brief Recognizes a model in a scene using a graph-based approach. First a consistency graph
 /// is constructed, where the nodes represent the matches and edges connect matches that are
@@ -20,7 +19,7 @@ public:
   /// \brief Initializes a new instance of the IncrementalGeometricConsistencyRecognizer class.
   /// \param params The parameters of the geometry consistency grouping.
   /// \param max_model_radius Radius of the bounding cylinder of the model.
-  IncrementalGeometricConsistencyRecognizer(const params::GeometricConsistencyParams &params,
+  IncrementalGeometricConsistencyRecognizer(const GeometricConsistencyParams &params,
                                             float max_model_radius) noexcept;
 
 protected:
@@ -84,6 +83,5 @@ private:
   float max_consistency_distance_for_caching_;
   float half_max_consistency_distance_for_caching_;
 }; // class IncrementalGeometricConsistencyRecognizer
-
 
 } // namespace long_term_relocalization

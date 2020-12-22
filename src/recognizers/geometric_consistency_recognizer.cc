@@ -1,4 +1,4 @@
-#include "relocalization/recognizers/geometric_consistency_recognizer.h"
+#include "long_term_relocalization/recognizers/geometric_consistency_recognizer.h"
 
 #include <algorithm>
 #include <vector>

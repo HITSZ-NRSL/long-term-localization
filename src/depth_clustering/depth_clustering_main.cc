@@ -1,17 +1,19 @@
 // Copyright (c) 2020. All rights reserved.
 // Author: lisilin013@163.com(Silin Li) on 20-10-09.
 
-#include "depth_clustering/depth_clustering.h"
-#include "depth_clustering/range_image_constructor.h"
-#include "utils/common/constants.h"
-#include "utils/common/file_path.h"
-#include "utils/params/params_loader.h"
-#include "utils/ros_utils/ros_publisher.h"
-#include "utils/ros_utils/ros_utils.h"
+#include "long_term_relocalization/depth_clustering/depth_clustering.h"
+
+#include "common/file/file_path.h"
+#include "common/ros_utils/ros_publisher.h"
+#include "common/ros_utils/ros_utils.h"
+#include "long_term_relocalization/depth_clustering/range_image_constructor.h"
+#include "long_term_relocalization/utils/constants.h"
+#include "long_term_relocalization/utils/params_loader.h"
+#include "long_term_relocalization/utils/utils.h"
 
 using namespace long_term_relocalization;
 
-std::unique_ptr<params::ParamsLoader> params_loader;
+std::unique_ptr<ParamsLoader> params_loader;
 std::unique_ptr<DepthClustering<pcl_utils::PointIRL>> depth_clustering_;
 std::unique_ptr<ros_utils::RosPublisher<sensor_msgs::PointCloud2>> ground_cloud_publisher_;
 std::unique_ptr<ros_utils::RosPublisher<sensor_msgs::PointCloud2>> cluster_cloud_publisher_;
@@ -23,7 +25,8 @@ std::unique_ptr<ros_utils::RosPublisher<sensor_msgs::PointCloud2>> trunk_pole_cl
 std::vector<pcl_utils::PointIRLCloud::Ptr>
 FilterClusters(const std::vector<pcl_utils::PointIRLCloud::Ptr> &clusters);
 bool IsPoleLikeCluster(const pcl_utils::PointIRLCloud &cluster);
-pcl_utils::PointIRLCloud ExtractClusterPoints(const std::vector<pcl_utils::PointIRLCloud::Ptr> &clusters);
+pcl_utils::PointIRLCloud
+ExtractClusterPoints(const std::vector<pcl_utils::PointIRLCloud::Ptr> &clusters);
 
 void PointsCallback(const sensor_msgs::PointCloud2::ConstPtr &msg) {
   pcl_utils::PointIRLCloud cloud;
@@ -33,13 +36,9 @@ void PointsCallback(const sensor_msgs::PointCloud2::ConstPtr &msg) {
   const std::vector<pcl_utils::PointIRLCloud::Ptr> clusters = depth_clustering_->ExtractClusters();
   const std::vector<pcl_utils::PointIRLCloud::Ptr> filtered_clusters = FilterClusters(clusters);
 
-  ground_cloud_publisher_->Publish(depth_clustering_->ExtractGroundPoints(),
-                                   common::Time(common::FromSeconds(msg->header.stamp.toSec())));
-  cluster_cloud_publisher_->Publish(depth_clustering_->ExtractClusterPoints(),
-                                    common::Time(common::FromSeconds(msg->header.stamp.toSec())));
-  trunk_pole_cloud_publisher_->Publish(
-      ExtractClusterPoints(filtered_clusters),
-      common::Time(common::FromSeconds(msg->header.stamp.toSec())));
+  ground_cloud_publisher_->Publish(depth_clustering_->ExtractGroundPoints(), msg->header.stamp);
+  cluster_cloud_publisher_->Publish(depth_clustering_->ExtractClusterPoints(), msg->header.stamp);
+  trunk_pole_cloud_publisher_->Publish(ExtractClusterPoints(filtered_clusters), msg->header.stamp);
 }
 
 int main(int argc, char **argv) {
@@ -48,14 +47,13 @@ int main(int argc, char **argv) {
   ros::Subscriber rslidar_points_sub =
       nh.subscribe<sensor_msgs::PointCloud2>("/semantic_points", 5, &PointsCallback);
 
-  params_loader = std::make_unique<params::ParamsLoader>(ros_utils::GetConfigFilePath(),
-                                                         ros_utils::GetRS80AngleFilePath());
+  params_loader = std::make_unique<ParamsLoader>(GetConfigFilePath(), GetRS80AngleFilePath());
 
-  const params::DepthClusteringParams &depth_clustering_params =
+  const DepthClusteringParams &depth_clustering_params =
       params_loader->get_depth_clustering_params();
 
-  depth_clustering_ = std::make_unique<DepthClustering<pcl_utils::PointIRL>>(
-      depth_clustering_params);
+  depth_clustering_ =
+      std::make_unique<DepthClustering<pcl_utils::PointIRL>>(depth_clustering_params);
 
   ground_cloud_publisher_ = std::make_unique<ros_utils::RosPublisher<sensor_msgs::PointCloud2>>(
       "ground_cloud", 5, "base_link", "", true);

@@ -1,4 +1,4 @@
-#include "relocalization/semantic_eucidean_clustering.h"
+#include "long_term_relocalization/relocalization/semantic_eucidean_clustering.h"
 
 #include <glog/logging.h>
 
@@ -11,13 +11,12 @@
 #include <pcl/search/search.h>
 #include <pcl/segmentation/region_growing.h>
 
-#include "utils/common/tic_toc.h"
+#include "common/tic_toc.h"
 
 namespace long_term_relocalization {
 
-
 SemanticEucideanClustering::SemanticEucideanClustering(
-    const params::SemanticEucideanClusteringParams &params)
+    const SemanticEucideanClusteringParams &params)
     : params_(params) {}
 
 void SemanticEucideanClustering::Process(const PointCloud &cloud_in) {
@@ -102,7 +101,8 @@ void SemanticEucideanClustering::MergeSemanticSeedsClusters() {
   //     // pointCloudVisualizer(it->getClusterCloud(), "cluster cloud " +
   //     // boost::lexical_cast<string>(j));
   //     // pointCloudVisualizer(*it, "cluster shape " + boost::lexical_cast<string>(j));
-  //     for (list<Cluster>::iterator it2 = rawClusters->begin(); it2 != rawClusters->end(); ++it2) {
+  //     for (list<Cluster>::iterator it2 = rawClusters->begin(); it2 != rawClusters->end(); ++it2)
+  //     {
   //       if (!it2->isProcessed()) {
   //         // pointCloudVisualizer(it2->getClusterCloud(), "cluster cloud " +
   //         // boost::lexical_cast<string>(j)); pointCloudVisualizer(*it2, "cluster shape " +
@@ -114,8 +114,8 @@ void SemanticEucideanClustering::MergeSemanticSeedsClusters() {
   //         // 2. centroids's vector norm and angle
   //         if (heightDiff < maxDistanceStitches && heightDiff > 0) {
   //           Eigen::Vector4f diffVec = it2->getCentroid() - stitchCluster.getCentroid();
-  //           //** Hardcoded value below for Euclidean distance threshold of clusters to be stitched
-  //           if (diffVec.norm() < 5) {
+  //           //** Hardcoded value below for Euclidean distance threshold of clusters to be
+  //           stitched if (diffVec.norm() < 5) {
   //             // double angle =
   //             // abs(pcl::normAngle(diffVec.dot(Eigen::Vector4f::UnitZ())/diffVec.norm()));
   //             double angle = pcl::getAngle3D(diffVec, Eigen::Vector4f::UnitZ());
@@ -140,7 +140,7 @@ void SemanticEucideanClustering::MergeSemanticSeedsClusters() {
 
 std::vector<pcl::PointIndices> SemanticEucideanClustering::EucideanSegmentation(
     const PointCloud::Ptr &cloud,
-    params::SemanticEucideanClusteringParams::ObjectEucideanParams &obj_eucidean_params) {
+    SemanticEucideanClusteringParams::ObjectEucideanParams &obj_eucidean_params) {
   pcl::search::KdTree<PointT>::Ptr tree(new pcl::search::KdTree<PointT>);
   tree->setInputCloud(cloud);
 
@@ -244,6 +244,5 @@ void SemanticEucideanClustering::ResetParams() {
 
   raw_clusters_.clear();
 }
-
 
 } // namespace long_term_relocalization

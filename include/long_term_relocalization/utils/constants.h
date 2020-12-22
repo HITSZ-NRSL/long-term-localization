@@ -8,7 +8,7 @@ namespace long_term_relocalization {
 
 // -------------------- common path --------------------
 constexpr char kCurrentPackageName[] = "long_term_relocalization";
-constexpr char kRelativeLongTermSlamParamsFilePath[] = "/config/long_term_slam_params.yaml";
+constexpr char kRelativeParamsFilePath[] = "/config/long_term_relocalization_params.yaml";
 constexpr char kRelativeRs80AngleFilePath[] = "/config/rs80_laser_angles.csv";
 constexpr char kRelativeDataDirPath[] = "/data";
 constexpr char kRelativeMapDirPath[] = "/map";

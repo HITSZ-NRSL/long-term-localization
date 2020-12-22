@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "relocalization/cluster_manager.h"
-#include "utils/params/params_types.h"
+#include "long_term_relocalization/relocalization/cluster_manager.h"
+#include "long_term_relocalization/utils/params_types.h"
 
 namespace long_term_relocalization {
 
@@ -61,7 +61,7 @@ using EdgePairWiseMatches =
 
 class ClusterMatcher {
 public:
-  ClusterMatcher(const params::ClusterMatcherParams &params) : params_(params) {}
+  ClusterMatcher(const ClusterMatcherParams &params) : params_(params) {}
 
   virtual ~ClusterMatcher() = default;
 
@@ -74,7 +74,7 @@ private:
   int ComputeDistanceBetweenNeighborEdges(const std::vector<DistAngle> &source,
                                           const std::vector<DistAngle> &target, double *distance);
 
-  params::ClusterMatcherParams params_;
+  ClusterMatcherParams params_;
 };
 
 } // namespace long_term_relocalization
