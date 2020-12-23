@@ -49,18 +49,4 @@ constexpr char kImuFrameId[] = "imu";
 constexpr char kLidarFrameId[] = "base_link";
 constexpr char kOdomFrameId[] = "odom";
 
-// -------------------- NCLT --------------------
-constexpr char kImuFileName[] = "ms25.csv";
-constexpr char kImuEulerFileName[] = "ms25_euler.csv";
-constexpr double kVelodyneFrequencyInNclt = 5.0;
-constexpr std::array<double, 6> kNormalGtToGtTransform = {0, 0, 0, M_PI, 0, 0}; // x y z r p y
-constexpr char kRelativeNcltReaderSemanticParamsFilePath[] = "/config/nclt_semantic_params.yaml";
-constexpr char kRelativeNcltReaderCamerasParamsFilePath[] = "/params/cam_params/K_cams.yaml";
-
-// -------------------- NRSL --------------------
-constexpr char kRelativeNrslReaderCamerasParamsFilePath[] =
-    "/params/hit_sensors_params/nrsl_ladybug3_cams_intrinsic_params.yaml";
-constexpr char kRelativeNrslLadybug3VirtualCamsIntrinsicFilePath[] =
-    "/params/hit_sensors_params/nrsl_ladybug3_cams_params.yaml";
-
 } // namespace long_term_relocalization
