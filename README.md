@@ -1,5 +1,26 @@
 # Long Term Localization
-Pole-like Objects Mapping and Long-Term Robot Localization in Dynamic Urban Scenarios
+Pole-like Objects Mapping and Long-Term Robot Localization is an algorithm that makes robot or UAV locate itself in Dynamic Urban Scenarios robustly and accurately by correcting the real time Lidar odometry.
+
+![avatar](../long-term-localization/figs/semantic_cluster_map.png)
+
+If you use Long Term Localization, please cite:
+```
+@misc{2103.13224,
+Author = {Zhihao Wang, Silin Li, Ming Cao, Haoyao Chen and Yunhui Liu},
+Title = {Pole-like Objects Mapping and Long-Term Robot Localization in Dynamic Urban Scenarios},
+Year = {2021},
+Eprint = {arXiv:2103.13224},
+}
+```
+
+# 0 Download Self-made Dataset
+2020-10-12-demo.bag
+
+https://www.jianguoyun.com/p/DWsN36kQzcSTBxiCn-kD (Access Password：nrsl2021)
+
+2020-11-05-demo.bag
+
+https://www.jianguoyun.com/p/Df4eWSQQzcSTBxiHn-kD (Access Password：nrsl2021)
 
 # 1 Settings
 - System: ubuntu 16.04
@@ -27,20 +48,25 @@ catkin build
 
 
 # 3 Run
-## 3.1 Localization
-Modify the following code in config file `src/long_term_relocalization/config/long_term_relocalization_params.yaml`
-change to `relocalization` mode.
-```
-relocalization:
-  mode: relocalization
-```
 
-```
-# copy pole cluster map to another folder.
-cp src/long_term_relocalization/maps/clusters_map.bin /tmp/
 
-# launch relocalization nodes.
-roslaunch long_term_relocalization relocalization.launch
+## 3.1 Semantic Processing
+```bash
+# terminal 1
+roslaunch lio_sam run.launch 
+
+# terminal 2
+./sh/record.sh
+
+# terminal 3
+rosbag play 2020-10-14-demo.bag --clock 
+```
+When the bag run over, shut down the terminal 2 and 3; 
+
+Then run below code to extract the semantic
+
+```bash
+./sh/offline_process.sh
 ```
 
 
@@ -59,4 +85,56 @@ roslaunch long_term_relocalization mapping.launch
 # when you want to save pole cluster map, open another terminal and run the following cmd.
 rosrun long_term_relocalization save_cluster_map 
 ```
+The cluster_map will be saved in "\tmp\clusters_map.bin"
+
+
+## 3.3 Localization
+
+
+ - Notes: The bag to be matched (2020-11-13-demo.bag) need to run the process in **3.1 Semantic Processing** to extract the semantic cluster, and then used for matching and localization. 
+
+### 3.3.1 Semantic Processing
+
+```bash
+# terminal 1
+roslaunch lio_sam run.launch 
+
+# terminal 2
+./sh/record.sh
+
+# terminal 3
+rosbag play 2020-11-13-demo.bag --clock 
+```
+When the bag run over, shut down the terminal 2 and 3; 
+
+Then run below code to extract the semantic.
+
+```bash
+./sh/offline_process.sh
+```
+
+### 3.3.2 Localization
+
+Modify the following code in config file `src/long_term_relocalization/config/long_term_relocalization_params.yaml`
+change to `relocalization` mode.
+```
+relocalization:
+  mode: relocalization
+```
+
+```
+# copy pole cluster map to folder "src/long_term_relocalization/maps".
+cp src/long_term_relocalization/maps/clusters_map.bin /tmp/
+
+# launch relocalization nodes.
+roslaunch long_term_relocalization relocalization.launch
+```
+
+Then play the processed bag to match with "clusters_map.bin".
+
+```
+cd ~/offline_process/sequences/00
+rosbag play semantic.bag --clock   
+```
+
 
