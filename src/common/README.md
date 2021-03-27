@@ -10,9 +10,9 @@
 - clang-format-6.0
 ```bash
 sudo apt-get install clang-format-6.0
-# 在vscode打开工程后，在根目录下执行如下命令
+# cd your workspaces floder
 /usr/bin/clang-format-6.0  -style=llvm -dump-config > .clang-format
-# vscode 安装格式化插件，设置clang-format路径，自行google
+# install the clang-format plugin in vscode extensions and then set the path of clage-formate, if you don't know how, google will help you.
 ```
 - Third Parties
     - gtest[https://github.com/google/googletest]
