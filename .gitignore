@@ -1,0 +1,12 @@
+build
+devel
+.catkin_workspace
+src/cmake-build-*
+src/CMakeLists.txt
+src/.idea
+src/.vscode
+src/nclt2ros
+src/.rosinstall
+src/.rosinstall.bak
+.idea
+cmake-build-*

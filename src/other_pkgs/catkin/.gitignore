@@ -1,0 +1,16 @@
+build
+._*
+.\#*
+\#*\#
+doc/build
+*.pyc
+.rosinstall
+.project
+.pydevproject
+*~
+*.orig
+*~
+bin/.tmp
+.tmp
+
+bin/catkin_make_isolatedc

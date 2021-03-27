@@ -1,0 +1,11 @@
+<package>
+  <name>glow</name>
+  <version>0.0.1</version>
+  <description>OpenGL Object Wrapper (GLOW)</description>
+  <maintainer email="jens.behley@igg.uni-bonn.de">Jens Behley</maintainer>
+  <license>MIT</license>
+
+  <author>Jens Behley</author>
+
+  <buildtool_depend>catkin</buildtool_depend>  
+</package>
