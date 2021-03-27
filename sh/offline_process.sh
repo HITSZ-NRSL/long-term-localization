@@ -1,13 +1,13 @@
 #!/usr/bin/zsh
 source devel/setup.zsh
 
-# 使用RangeNet处理刚才保存的点云数据
+# use range-net to process the data
 cd src/other_pkgs/lidar-bonnetal/train/tasks/semantic
 echo "run RangeNet++..."
 rm -rf  ~/logs/
 python3 infer.py -d ~/offline_process/ -m ../../../model/trunk_pole -l ~/logs/
 
-# 把RangeNet++预测的结果文件拷贝到velodyne文件夹下
+# copy the results infered by range-net to velodyne folder, this is for creating a floder structure same as SemanticKITTI dataset.
 echo "copy predictions to labels..."
 cp -r ~/logs/sequences/00/predictions ~/offline_process/sequences/00/labels
 
