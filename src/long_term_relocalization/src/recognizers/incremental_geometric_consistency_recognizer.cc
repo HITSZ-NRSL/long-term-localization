@@ -1,3 +1,6 @@
+// Copyright (c) eth-asl. All rights reserved.
+// https://github.com/ethz-asl/segmap/tree/master/segmatch/src/recognizers
+
 #include "long_term_relocalization/recognizers/incremental_geometric_consistency_recognizer.h"
 
 #include <limits>
@@ -236,6 +239,5 @@ inline float IncrementalGeometricConsistencyRecognizer::computeConsistencyDistan
   const float model_distance = (model_point_1 - model_point_2).norm();
   return fabs(scene_distance - model_distance);
 }
-
 
 } // namespace long_term_relocalization

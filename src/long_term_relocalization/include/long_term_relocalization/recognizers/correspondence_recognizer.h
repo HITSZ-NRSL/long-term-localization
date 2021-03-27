@@ -1,3 +1,6 @@
+// Copyright (c) eth-asl. All rights reserved.
+// https://github.com/ethz-asl/segmap/tree/master/segmatch/src/recognizers
+
 #pragma once
 
 #include <vector>

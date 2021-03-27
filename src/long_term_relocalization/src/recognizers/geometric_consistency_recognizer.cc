@@ -1,3 +1,6 @@
+// Copyright (c) eth-asl. All rights reserved.
+// https://github.com/ethz-asl/segmap/tree/master/segmatch/src/recognizers
+
 #include "long_term_relocalization/recognizers/geometric_consistency_recognizer.h"
 
 #include <algorithm>
@@ -10,7 +13,6 @@
 #include <pcl/recognition/cg/geometric_consistency.h>
 
 namespace long_term_relocalization {
-
 
 void GeometricConsistencyRecognizer::recognize(const PairwiseMatches &predicted_matches) {
   // Clear the current candidates and check if we got matches.
@@ -90,6 +92,5 @@ void GeometricConsistencyRecognizer::recognize(const PairwiseMatches &predicted_
     }
   }
 }
-
 
 } // namespace long_term_relocalization

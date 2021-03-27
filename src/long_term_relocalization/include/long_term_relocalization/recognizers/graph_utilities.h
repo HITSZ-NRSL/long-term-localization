@@ -1,3 +1,6 @@
+// Copyright (c) eth-asl. All rights reserved.
+// https://github.com/ethz-asl/segmap/tree/master/segmatch/src/recognizers
+
 #pragma once
 
 #include <fstream>
@@ -11,7 +14,6 @@
 #include <boost/graph/graphviz.hpp>
 
 namespace long_term_relocalization {
-
 
 /// \brief Provide generic graph utility functions.
 class GraphUtilities {
@@ -266,6 +268,5 @@ private:
     return max_found_size;
   }
 };
-
 
 } // namespace long_term_relocalization

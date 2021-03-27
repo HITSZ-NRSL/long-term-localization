@@ -1,3 +1,6 @@
+// Copyright (c) eth-asl. All rights reserved.
+// https://github.com/ethz-asl/segmap/tree/master/segmatch/src/recognizers
+
 #include "long_term_relocalization/recognizers/correspondence_recognizer_factory.h"
 
 #include "long_term_relocalization/recognizers/geometric_consistency_recognizer.h"
@@ -5,7 +8,6 @@
 #include "long_term_relocalization/recognizers/partitioned_geometric_consistency_recognizer.h"
 
 namespace long_term_relocalization {
-
 
 CorrespondenceRecognizerFactory::CorrespondenceRecognizerFactory(
     const GeometricConsistencyParams &params)
@@ -25,6 +27,5 @@ std::unique_ptr<CorrespondenceRecognizer> CorrespondenceRecognizerFactory::creat
     throw std::invalid_argument("Invalid recognizer type specified: " + params_.recognizer_type);
   }
 }
-
 
 } // namespace long_term_relocalization

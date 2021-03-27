@@ -1,3 +1,6 @@
+// Copyright (c) eth-asl. All rights reserved.
+// https://github.com/ethz-asl/segmap/tree/master/segmatch/src/recognizers
+
 #pragma once
 
 #include <limits>
@@ -116,6 +119,5 @@ MatchesPartitioner::computeGridPartitioning(const PairwiseMatches &matches,
 
   return partitioning;
 }
-
 
 } // namespace long_term_relocalization

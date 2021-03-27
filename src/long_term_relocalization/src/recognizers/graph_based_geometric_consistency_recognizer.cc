@@ -1,3 +1,6 @@
+// Copyright (c) eth-asl. All rights reserved.
+// https://github.com/ethz-asl/segmap/tree/master/segmatch/src/recognizers
+
 #include "long_term_relocalization/recognizers/graph_based_geometric_consistency_recognizer.h"
 
 #include <algorithm>
@@ -8,7 +11,6 @@
 #include "long_term_relocalization/recognizers/graph_utilities.h"
 
 namespace long_term_relocalization {
-
 
 GraphBasedGeometricConsistencyRecognizer::GraphBasedGeometricConsistencyRecognizer(
     const GeometricConsistencyParams &params) noexcept
@@ -72,6 +74,5 @@ inline Eigen::Matrix4f GraphBasedGeometricConsistencyRecognizer::estimateRigidTr
   // transformation parameters between two point patterns", Shinji Umeyama, DOI: 10.1109/34.88573
   return pcl::umeyama(source, target, false).cast<float>();
 }
-
 
 } // namespace long_term_relocalization

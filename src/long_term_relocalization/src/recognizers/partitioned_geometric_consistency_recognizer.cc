@@ -1,3 +1,6 @@
+// Copyright (c) eth-asl. All rights reserved.
+// https://github.com/ethz-asl/segmap/tree/master/segmatch/src/recognizers
+
 #include "long_term_relocalization/recognizers/partitioned_geometric_consistency_recognizer.h"
 
 #include <algorithm>
@@ -128,6 +131,5 @@ PartitionedGeometricConsistencyRecognizer::buildConsistencyGraph(
 
   return consistency_graph;
 }
-
 
 } // namespace long_term_relocalization
