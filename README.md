@@ -1,7 +1,7 @@
 # Long Term Localization
 Pole-like Objects Mapping and Long-Term Robot Localization is an algorithm that makes robot or UAV locate itself in Dynamic Urban Scenarios robustly and accurately by correcting the real time Lidar odometry.
 
-![avatar](../long-term-localization/figs/semantic_cluster_map.png)
+![avatar](figs/semantic_cluster_map.png)
 
 If you use Long Term Localization, please cite:
 ```
