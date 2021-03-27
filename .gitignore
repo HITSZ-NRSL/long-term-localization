@@ -10,3 +10,6 @@ src/.rosinstall
 src/.rosinstall.bak
 .idea
 cmake-build-*
+.vscode
+.catkin_tools
+logs
