@@ -20,7 +20,7 @@ https://www.jianguoyun.com/p/DWsN36kQzcSTBxiCn-kD (Access Password：nrsl2021)
 
 2020-11-05-demo.bag
 
-https://www.jianguoyun.com/p/Df4eWSQQzcSTBxiHn-kD (Access Password：nrsl2021)
+https://www.jianguoyun.com/p/DZr9T-UQzcSTBxjdxOoD (Access Password：nrsl2021)
 
 # 1 Settings
 - System: ubuntu 16.04
@@ -35,8 +35,19 @@ https://www.jianguoyun.com/p/Df4eWSQQzcSTBxiHn-kD (Access Password：nrsl2021)
 ## 2.1 Install dependencies
 Please take a look the [README](https://github.com/HITSZ-NRSL/long-term-localization/blob/master/src/common/README.md) in `long-term-localization/src/common` folder.
 
-## 2.2 Build
+## 2.2 build lio_sam
 ```
+cd ~
+mkdir -p lio_sam_ws/src
+cd lio_sam_ws/src
+git clone https://github.com/nixwang/lio_sam.git
+cd ../
+catkin_make
+```
+
+## 2.3 Build
+```
+cd ~
 git clone https://github.com/HITSZ-NRSL/long-term-localization.git
 cd long-term-localization/src
 git clone https://github.com/lisilin013/third_parities.git
@@ -49,23 +60,29 @@ catkin build
 
 # 3 Run
 
-
 ## 3.1 Semantic Processing
 ```bash
 # terminal 1
+cd ~/lio_sam_ws
 roslaunch lio_sam run.launch 
 
 # terminal 2
+cd long-term-localization
 ./sh/record.sh
 
 # terminal 3
-rosbag play 2020-10-14-demo.bag --clock 
+rosbag play 2020-10-12-demo.bag --clock 
 ```
 When the bag run over, shut down the terminal 2 and 3; 
 
-Then run below code to extract the semantic
+Then run below code to extract the semantic.
+
+pytorch version necessary:
+
+pytorch==1.7.1 torchvision==0.8.2 torchaudio==0.7.2 cudatoolkit=10.1
 
 ```bash
+cd long-term-localization
 ./sh/offline_process.sh
 ```
 
@@ -79,6 +96,10 @@ relocalization:
 ```
 
 ```
+# play bag
+cd ~/offline_process/sequences/00
+rosbag play semantic.bag --clock
+
 # launch mapping nodes.
 roslaunch long_term_relocalization mapping.launch
 
@@ -91,7 +112,7 @@ The cluster_map will be saved in "\tmp\clusters_map.bin"
 ## 3.3 Localization
 
 
- - Notes: The bag to be matched (2020-11-13-demo.bag) need to run the process in **3.1 Semantic Processing** to extract the semantic cluster, and then used for matching and localization. 
+ - Notes: The bag to be matched (2020-11-05-demo.bag) need to run the process in **3.1 Semantic Processing** to extract the semantic cluster, and then used for matching and relocalization. 
 
 ### 3.3.1 Semantic Processing
 
@@ -103,7 +124,7 @@ roslaunch lio_sam run.launch
 ./sh/record.sh
 
 # terminal 3
-rosbag play 2020-11-13-demo.bag --clock 
+rosbag play 2020-11-05-demo.bag --clock 
 ```
 When the bag run over, shut down the terminal 2 and 3; 
 
@@ -123,14 +144,11 @@ relocalization:
 ```
 
 ```
-# copy pole cluster map to folder "src/long_term_relocalization/maps".
-cp src/long_term_relocalization/maps/clusters_map.bin /tmp/
-
 # launch relocalization nodes.
 roslaunch long_term_relocalization relocalization.launch
 ```
 
-Then play the processed bag to match with "clusters_map.bin".
+Then play the processed bag (by 2020-11-05-demo.bag) to match with "clusters_map.bin".
 
 ```
 cd ~/offline_process/sequences/00
