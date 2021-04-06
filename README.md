@@ -22,6 +22,7 @@ https://www.jianguoyun.com/p/DWsN36kQzcSTBxiCn-kD (Access Password：nrsl2021)
 
 https://www.jianguoyun.com/p/DZr9T-UQzcSTBxjdxOoD (Access Password：nrsl2021)
 
+
 # 1 Settings
 - System: ubuntu 16.04
 - C++ version: c++17
@@ -80,6 +81,12 @@ Then run below code to extract the semantic.
 pytorch version necessary:
 
 pytorch==1.7.1 torchvision==0.8.2 torchaudio==0.7.2 cudatoolkit=10.1
+
+The trained CNN model can be download here.
+```
+https://www.jianguoyun.com/p/DXrLq2UQzcSTBxjllusD (Access Password：nrsl2021)
+```
+and unzip the model file in "long-term-localization/src/other_pkgs/lidar-bonnetal", then run below sh file.
 
 ```bash
 cd long-term-localization
