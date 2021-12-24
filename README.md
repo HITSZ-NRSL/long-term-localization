@@ -35,6 +35,7 @@ https://www.jianguoyun.com/p/DZr9T-UQzcSTBxjdxOoD (Access Password：nrsl2021)
 
 ## 2.1 Install dependencies
 Please take a look the [README](https://github.com/HITSZ-NRSL/long-term-localization/blob/master/src/common/README.md) in `long-term-localization/src/common` folder.
+And the size of the model file is too big, the training process can refer to the range-net++ in "long-term-localization/src/other_pkgs/lidar-bonnetal/" folder.
 
 ## 2.2 build lio_sam
 ```
