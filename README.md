@@ -16,12 +16,11 @@ Eprint = {arXiv:2103.13224},
 # 0 Download Self-made Dataset
 2020-10-12-demo.bag
 
-https://www.jianguoyun.com/p/DWsN36kQzcSTBxiCn-kD (Access Password：nrsl2021)
+https://drive.google.com/file/d/1cF6FoB6OEIBzl4U96_YxJtfJn8tEVwIr/view?usp=sharing
 
 2020-11-05-demo.bag
 
-https://www.jianguoyun.com/p/DZr9T-UQzcSTBxjdxOoD (Access Password：nrsl2021)
-
+https://drive.google.com/file/d/1GTiFdtKle1ydBWt5SqTHwGaCLaXfB3-3/view?usp=sharing
 
 # 1 Settings
 - System: ubuntu 16.04
