@@ -5,12 +5,7 @@ Pole-like Objects Mapping and Long-Term Robot Localization is an algorithm that 
 
 If you use Long Term Localization, please cite:
 ```
-@misc{2103.13224,
-Author = {Zhihao Wang, Silin Li, Ming Cao, Haoyao Chen and Yunhui Liu},
-Title = {Pole-like Objects Mapping and Long-Term Robot Localization in Dynamic Urban Scenarios},
-Year = {2021},
-Eprint = {arXiv:2103.13224},
-}
+Z. Wang, S. Li, M. Cao, H. Chen and Y. Liu, "Pole-like Objects Mapping and Long-Term Robot Localization in Dynamic Urban Scenarios," 2021 IEEE International Conference on Robotics and Biomimetics (ROBIO), 2021, pp. 998-1003, doi: 10.1109/ROBIO54168.2021.9739599.
 ```
 
 # 0 Download Self-made Dataset
