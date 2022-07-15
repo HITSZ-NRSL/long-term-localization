@@ -81,6 +81,11 @@ The trained CNN model can be download here.
 ```
 https://www.jianguoyun.com/p/DUoZpFUQ84SvCRjL2OsD (Access Password：nros2021)
 ```
+or in google drive
+```
+https://drive.google.com/file/d/1d7nw5IuQdAzLGRM5W_cP4LZbxnh2_3lw/view?usp=sharing
+```
+
 and unzip the model file in "long-term-localization/src/other_pkgs/lidar-bonnetal", then run below sh file.
 
 ```bash
