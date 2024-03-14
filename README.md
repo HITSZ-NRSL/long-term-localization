@@ -17,6 +17,12 @@ https://drive.google.com/file/d/1cF6FoB6OEIBzl4U96_YxJtfJn8tEVwIr/view?usp=shari
 
 https://drive.google.com/file/d/1GTiFdtKle1ydBWt5SqTHwGaCLaXfB3-3/view?usp=sharing
 
+And a more complete dataset(19G) can be download in BaiduYun.
+
+链接: https://pan.baidu.com/s/1zmOcu88bVXCtZdajv_IVEA?pwd=x8vx 提取码: x8vx 
+
+The dataset should be decompressed by using "rosbag decompress xxx".
+
 # 1 Settings
 - System: ubuntu 16.04
 - C++ version: c++17
